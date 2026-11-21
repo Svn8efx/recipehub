@@ -1,5 +1,28 @@
 # RecipeHub – Recipe Sharing and Meal Planner
 
+**Author:** Anish Kumar Jha
+**Roll No:** 2501010273
+
+## Live links
+
+| What | Link |
+| --- | --- |
+| Live website (Vercel) | https://recipehub-opal.vercel.app |
+| Backend API (Render) | https://recipehub-api-xqzc.onrender.com |
+| API health check | https://recipehub-api-xqzc.onrender.com/api/health |
+| GitHub repository | https://github.com/Svn8efx/recipehub |
+
+**Demo logins** (sample accounts created by the seed script)
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | `admin@recipehub.com` | `Admin@123` |
+| User | `demo@recipehub.com` | `Demo@123` |
+
+> **Note:** the backend runs on Render's free plan, which goes to sleep after 15 minutes without visitors. The first request after that can take about 50 seconds. If the website shows "Cannot reach the server", open the API health check link above, wait for `{"status":"ok"}`, then reload the website.
+
+## Description
+
 RecipeHub is a full-stack web application where users share recipes, save favourites and plan their weekly meals. It was built as a college assignment with the MERN stack (MongoDB, Express, React, Node.js).
 
 ## Features
@@ -163,6 +186,34 @@ Open **http://localhost:5173** in your browser.
 | GET | `/api/admin/reports` | admin | Reported recipes |
 | DELETE | `/api/admin/reports/:recipeId` | admin | Dismiss reports |
 | DELETE | `/api/admin/recipes/:recipeId` | admin | Remove a recipe |
+
+## Deployment
+
+The app is deployed in three parts:
+
+| Part | Service | Settings |
+| --- | --- | --- |
+| Database | MongoDB Atlas (free M0 cluster) | Network Access allows `0.0.0.0/0` so Render can connect |
+| Backend | Render (Web Service) | Root Directory `backend`, Build `npm install`, Start `npm start` |
+| Frontend | Vercel | Root Directory `frontend`, Framework Vite |
+
+**Environment variables on Render**
+
+| Variable | Value |
+| --- | --- |
+| `MONGO_URI` | MongoDB Atlas connection string (ends with `/recipehub`) |
+| `JWT_SECRET` | a long random secret |
+| `CLIENT_URL` | `https://recipehub-opal.vercel.app` (no `/` at the end) |
+
+**Environment variable on Vercel**
+
+| Variable | Value |
+| --- | --- |
+| `VITE_API_URL` | `https://recipehub-api-xqzc.onrender.com/api` |
+
+Vercel only reads `VITE_API_URL` while building, so redeploy after changing it. The file `frontend/vercel.json` makes page refreshes work with React Router.
+
+To load the sample data into the Atlas database, put the Atlas string in `backend/.env` and run `npm run seed` from the `backend` folder.
 
 ## Notes for the viva
 
